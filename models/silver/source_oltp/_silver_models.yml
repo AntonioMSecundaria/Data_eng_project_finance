@@ -7,6 +7,12 @@ models:
         tests: [unique, not_null]
       - name: ticker
         tests: [unique, not_null]
+      - name: sector_id
+        tests: [not_null]
+      - name: asset_class_id
+        tests: [not_null]
+      - name: currency_code
+        tests: [not_null]
 
   - name: orders
     description: Una fila por orden con su última versión.

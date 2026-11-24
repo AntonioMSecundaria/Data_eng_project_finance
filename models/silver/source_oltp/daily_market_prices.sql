@@ -17,17 +17,21 @@ with prices as (
     {% endif %}
 )
 
-select
+with market_feed_priority(
+    select
     p.price_date
     , i.instrument_id
     , i.ticker
     , p.close_price
     , p.volume
-    , p.market_price_source
+    , s.price_source_id
     , p.loaded_at_utc
 from prices p
 inner join {{ ref('instruments') }} i
     on p.ticker = i.ticker
+inner join {{ ref('price_source') }} s
 qualify row_number() over (
     partition by p.price_date, i.instrument_id
-    order by iff(p.market_price_source = 'MARKET_FEED', 0, 1), p.loaded_at_utc desc) = 1
+    order by s.priority, p.loaded_at_utc desc) =1
+)
+

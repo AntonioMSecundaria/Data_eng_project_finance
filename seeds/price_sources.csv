@@ -1,0 +1,3 @@
+price_source_id,price_source,priority
+1,MARKET_FEED,1
+2,BACKUP_FEED,2
