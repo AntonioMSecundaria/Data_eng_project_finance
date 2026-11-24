@@ -2,7 +2,7 @@
 # Name your project! Project names should contain only lowercase characters
 # and underscores. A good package name should reflect your organization's
 # name or the intended use of these models
-name: 'my_new_project'
+name: 'Data_eng_project_finance'
 version: '1.0.0'
 
 # This setting configures which "profile" dbt uses for this project.
@@ -83,6 +83,12 @@ seeds:
         risk_profile_code: int
         risk_profile: varchar(50)
         
-    currencies:
-      +column_types:
+    # CAMBIO: "currencies" tenía +column_types vacío; se añade cuando esté definido
+    # currencies:
+    #   +column_types:
+    #     alpha3: varchar(3)
         
+snapshots:
+  Data_eng_project_finance:
+    +database: "{{ env_var('DBT_SILVER_DB') }}"
+    +schema: snapshots
