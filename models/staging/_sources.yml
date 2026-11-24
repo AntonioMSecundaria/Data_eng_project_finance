@@ -1,0 +1,20 @@
+
+sources:
+  - name: source_oltp
+    description: "Extracciones del OLTP simulado, cargadas Bronze."
+    database: "{{ env_var('DBT_BRONZE_DB') }}"
+    schema: DATA
+    config: 
+      loaded_at_field: _loaded_at
+      # Los datos son estáticos: con 30 días el aviso solo salta si Bronze queda abandonado.
+      freshness:
+        warn_after: {count: 30, period: day}
+    tables:
+      - name: tbl_instruments
+        description: "Catálogo de instrumentos: 10 operables y SPY como benchmark."
+      - name: tbl_market_prices
+        description: "Precio de cierre diario por proveedor (MARKET_FEED y BACKUP_FEED); puede haber una fila por proveedor para la misma sesión."
+      - name: tbl_orders
+        description: "Órdenes de compra y venta con su estado final (FILLED, CANCELLED, REJECTED)."
+      - name: tbl_parties_accounts
+        description: "Una fila por cuenta y versión; cada cambio de perfil de riesgo o de nombre de cartera añade una fila con su updated_at."
