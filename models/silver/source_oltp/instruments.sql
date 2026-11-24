@@ -18,4 +18,4 @@ with normalized as(
         on i.currency = c.currency_code
 )
 
-select * normalized
+select * from normalized

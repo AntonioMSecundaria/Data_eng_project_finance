@@ -15,9 +15,7 @@ with prices as (
     {% if is_incremental() %}
     where price_date >= (select dateadd(day, -10, max(price_date)) from {{ this }})
     {% endif %}
-)
-
-with market_feed_priority(
+), market_feed_priority as(
     select
     p.price_date
     , i.instrument_id
@@ -33,4 +31,6 @@ qualify row_number() over (
     partition by p.price_date, i.instrument_id
     order by s.priority, p.loaded_at_utc desc) =1
 )
+
+select * from market_feed_priority
 

@@ -73,20 +73,31 @@ seeds:
     +database: "{{ env_var('DBT_SILVER_DB') }}"
     +schema: seeds
     country_codes:
-      # Tipos explícitos para que dbt no los infiera del CSV
       +column_types:
+        country_name: varchar(50)
         country_code: varchar(2)
-        country_name: varchar(100)
         continent: varchar(50)
     risk_profile:
       +column_types:
         risk_profile_code: int
         risk_profile: varchar(50)
-        
-    # CAMBIO: "currencies" tenía +column_types vacío; se añade cuando esté definido
-    # currencies:
-    #   +column_types:
-    #     alpha3: varchar(3)
+    sectors:
+      +column_types:
+        sector_id: int
+        sector_name: varchar(50)
+    asset_classes:
+      +column_types:
+        asset_class_id: int
+        asset_class: varchar(50)
+    currencies:
+      +column_types:
+        currency_code: varchar(3)
+        currency_name: varchar(50)
+    price_sources:
+      +column_types:
+        price_source_id: int
+        price_source: varchar(20)
+        priority: int
         
 snapshots:
   Data_eng_project_finance:

@@ -59,6 +59,13 @@ models:
               arguments:
                 to: ref('clients')
                 field: client_code
+      - name: benchmark_instrument_id
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('instruments')
+                field: instrument_id
 
   - name: clients
     columns:

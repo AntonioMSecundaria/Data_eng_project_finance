@@ -5,7 +5,7 @@ with last_update as(
     , p.client_code
     , p.account_name
     , i.instrument_id           as benchmark_instrument_id
-    , p.opened_date
+    , p.created_at
     , p.updated_at_utc
 from {{ ref('stg_parties_accounts') }} p
 left join {{ref('instruments')}} i
