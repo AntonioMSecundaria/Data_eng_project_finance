@@ -1,15 +1,17 @@
 -- Estado actual de cada cuenta/cartera.
 with last_update as(
     select
-    account_id
-    , client_code
-    , account_name
-    , benchmark_ticker
-    , opened_date
-    , updated_at_utc
-from {{ ref('stg_parties_account') }}
+    p.account_id
+    , p.client_code
+    , p.account_name
+    , i.instrument_id           as benchmark_instrument_id
+    , p.opened_date
+    , p.updated_at_utc
+from {{ ref('stg_parties_account') }} p
+left join {{ref('instruments')}} i
+    on p.benchmark_ticker = i.ticker
 qualify row_number() over (partition by account_id order by updated_at_utc desc) = 1
 )
 
-select * last_update
+select * from last_update
 

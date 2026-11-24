@@ -21,7 +21,6 @@ with market_feed_priority(
     select
     p.price_date
     , i.instrument_id
-    , i.ticker
     , p.close_price
     , p.volume
     , s.price_source_id
@@ -29,7 +28,7 @@ with market_feed_priority(
 from prices p
 inner join {{ ref('instruments') }} i
     on p.ticker = i.ticker
-inner join {{ ref('price_source') }} s
+inner join {{ ref('price_sources') }} s
 qualify row_number() over (
     partition by p.price_date, i.instrument_id
     order by s.priority, p.loaded_at_utc desc) =1
