@@ -1,0 +1,56 @@
+models:
+  - name: stg_oltp__instruments
+    description: "Catálogo de instrumentos financieros."
+    columns:
+      - name: instrument_id
+        tests:
+          - unique
+          - not_null
+      - name: ticker
+        tests:
+          - unique
+          - not_null
+      - name: asset_class
+        tests:
+          - accepted_values:
+              arguments: 
+                values: ['Equity', 'ETF', 'Benchmark']
+      - name: currency
+        tests:
+          - accepted_values:
+              arguments: 
+                values: ['USD']
+
+  - name: stg_oltp__market_prices
+    columns:
+      - name: price_date
+        tests: [not_null]
+      - name: ticker
+        tests: [not_null]
+      - name: source
+        tests:
+          - accepted_values:
+              arguments: 
+                values: ['MARKET_FEED', 'BACKUP_FEED']
+
+  - name: stg_oltp__orders
+    columns:
+      - name: order_id
+        tests: [unique, not_null]
+      - name: side
+        tests:
+          - accepted_values:
+              arguments: 
+                values: ['BUY', 'SELL']
+      - name: status
+        tests:
+          - accepted_values:
+              arguments: 
+                values: ['FILLED', 'CANCELLED', 'REJECTED']
+
+  - name: stg_oltp__parties_accounts
+    columns:
+      - name: account_id
+        tests: [not_null]
+      - name: updated_at
+        tests: [not_null]
