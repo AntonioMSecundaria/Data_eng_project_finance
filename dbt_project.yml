@@ -65,7 +65,7 @@ models:
         +tags: ['core']
         +schema: core
         +grants:
-          select: ['REPORTING_ROLE']
+          select: ['PROY_REPORTING_ROLE']
 
 
 seeds:
