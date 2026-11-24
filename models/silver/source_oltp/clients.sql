@@ -5,7 +5,7 @@ with parties_accounts as(
         client_code
         , full_name
         , updated_at_utc
-    from {{ ref('stg_parties_account') }}
+    from {{ ref('stg_parties_accounts') }}
     qualify row_number() over (partition by client_code order by updated_at_utc desc
 ),
 
