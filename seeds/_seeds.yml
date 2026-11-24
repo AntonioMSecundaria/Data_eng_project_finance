@@ -16,4 +16,18 @@ seeds:
         description: Continente.
         data_tests:
           - not_null
+
+  - name: risk_pofile
+    description: Perfil de riesgo de los clientes
+    columns:
+      - name: risk_profile_code
+        description: Código del perfil de riesgo
+        data_tests:
+          - unique
+          - not_null
+      - name: risk_profile
+        description: Perfiles de riesgo del cliente
+        data_tests:
+          - unique
+          - not_null
   
