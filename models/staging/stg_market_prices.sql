@@ -7,6 +7,6 @@ select
     , upper(trim(ticker))   as ticker
     , close_price
     , volume
-    , upper(trim(source))   as market_rpice_source
-    , _loaded_at            as date_load
+    , source                as market_price_source
+    , _loaded_at            as loaded_at_utc
 from source

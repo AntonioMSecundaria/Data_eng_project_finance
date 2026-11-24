@@ -4,10 +4,10 @@ with source as(
 
 select
     instrument_id
-    , ticker
+    , upper(trim(ticker))               as ticker
     , instrument_name
     , sector
     , asset_class
     , currency
-    , _loaded_at as loaded_at           as date_load
+    , _loaded_at                        as loaded_at_utc
 from source
