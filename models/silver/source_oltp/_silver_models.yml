@@ -9,7 +9,7 @@ models:
         tests: [unique, not_null]
 
   - name: orders
-    description: "Una fila por orden con su última versión."
+    description: Una fila por orden con su última versión.
     columns:
       - name: order_id
         tests: [unique, not_null]
@@ -32,8 +32,8 @@ models:
               arguments:
                 values: ['FILLED', 'CANCELLED', 'REJECTED']
 
-  - name: daily_prices
-    description: "Un precio de cierre por sesión e instrumento."
+  - name: daily_market_prices
+    description: Un precio de cierre por sesión e instrumento.
     tests:
       - dbt_utils.unique_combination_of_columns:
           arguments:

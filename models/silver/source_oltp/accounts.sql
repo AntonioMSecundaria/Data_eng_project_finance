@@ -1,6 +1,6 @@
--- Silver: estado actual de cada cuenta (última versión por account_id).
--- El historial de cambios de cliente irá en el snapshot.
-select
+-- Estado actual de cada cuenta/cartera.
+with last_update as(
+    select
     account_id
     , client_code
     , account_name
@@ -9,3 +9,7 @@ select
     , updated_at_utc
 from {{ ref('stg_parties_account') }}
 qualify row_number() over (partition by account_id order by updated_at_utc desc) = 1
+)
+
+select * last_update
+

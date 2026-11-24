@@ -1,4 +1,4 @@
--- Silver: catálogo de instrumentos (3FN). Una fila por instrumento.
+-- Catálogo de instrumentos
 select
     instrument_id
     , ticker
