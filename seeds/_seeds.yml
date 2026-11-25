@@ -81,4 +81,27 @@ seeds:
         data_tests: 
          - unique 
          - not_null
-  
+
+  - name: order_sides
+    description: Lado de la orden y signo que aplica a la cantidad (compra suma, venta resta).
+    columns:
+      - name: side_id
+        data_tests: [unique, not_null]
+      - name: side_code
+        data_tests: [unique, not_null]
+      - name: quantity_sign
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: [1, -1]
+                
+  - name: order_statuses
+    description: Estados posibles de una orden e indicador de si llegó a ejecutarse.
+    columns:
+      - name: status_id
+        data_tests: [unique, not_null]
+      - name: status_code
+        data_tests: [unique, not_null]
+      - name: is_executed
+        data_tests: [not_null]
+          

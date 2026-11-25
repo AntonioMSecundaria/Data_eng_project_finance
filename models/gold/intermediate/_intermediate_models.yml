@@ -1,0 +1,34 @@
+version: 2
+
+models:
+  - name: int_filled_orders
+    description: "Órdenes ejecutadas con signo y flujos de dinero."
+    columns:
+      - name: order_id
+        tests: [unique, not_null]
+
+  - name: int_month_end_prices
+    description: "Cierre de cada instrumento en la última sesión del mes."
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns: [month_end_date, instrument_id]
+
+  - name: int_positions_month_end
+    description: "Posición, valor y plusvalía de cada cuenta e instrumento a fin de mes."
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns: [month_end_date, account_id, instrument_id]
+    columns:
+      - name: shares_held
+        tests:
+          - dbt_utils.accepted_range:
+              arguments:
+                min_value: 0
+
+  - name: int_instrument_monthly_returns
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns: [month_end_date, instrument_id]

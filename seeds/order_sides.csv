@@ -1,0 +1,3 @@
+side_id,side_code,side_name,quantity_sign
+1,BUY,Compra,1
+2,SELL,Venta,-1
