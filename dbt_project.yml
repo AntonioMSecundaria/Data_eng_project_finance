@@ -98,6 +98,18 @@ seeds:
         price_source_id: int
         price_source: varchar(20)
         priority: int
+    order_sides:
+      +column_types:
+        side_id: int
+        side_code: varchar(4)
+        side_name: varchar(20)
+        quantity_sign: int
+    order_statuses:
+      +column_types:
+        status_id: int
+        status_code: varchar(10)
+        status_name: varchar(20)
+        is_executed: boolean
         
 snapshots:
   Data_eng_project_finance:

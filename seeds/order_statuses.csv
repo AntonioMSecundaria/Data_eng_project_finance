@@ -1,0 +1,4 @@
+status_id,status_code,status_name,is_executed
+1,FILLED,Ejecutada,true
+2,CANCELLED,Cancelada,false
+3,REJECTED,Rechazada,false

@@ -26,17 +26,27 @@ models:
               arguments:
                 to: ref('accounts')
                 field: account_id
-      - name: ticker
+      - name: instrument_id
         tests:
+          - not_null
           - relationships:
               arguments:
                 to: ref('instruments')
-                field: ticker
-      - name: order_status
+                field: instrument_id
+      - name: side_id
         tests:
-          - accepted_values:
+          - not_null
+          - relationships:
               arguments:
-                values: ['FILLED', 'CANCELLED', 'REJECTED']
+                to: ref('order_sides')
+                field: side_id
+      - name: status_id
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('order_statuses')
+                field: status_id
 
   - name: daily_market_prices
     description: Un precio de cierre por sesión e instrumento.
