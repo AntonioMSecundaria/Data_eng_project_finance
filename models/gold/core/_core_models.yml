@@ -1,0 +1,70 @@
+version: 2
+
+models:
+  - name: dim_date
+    columns:
+      - name: date_key
+        tests: [unique, not_null]
+
+  - name: dim_instrument
+    columns:
+      - name: instrument_key
+        tests: [unique, not_null]
+
+  - name: dim_portfolio
+    description: "Una fila por cartera con los datos actuales de su cliente."
+    columns:
+      - name: portfolio_key
+        tests: [unique, not_null]
+      - name: risk_profile
+        tests: [not_null]
+
+  - name: fct_orders
+    description: "Una fila por orden."
+    columns:
+      - name: order_id
+        tests: [unique, not_null]
+      - name: date_key
+        tests:
+          - relationships:
+              arguments: {to: ref('dim_date'), field: date_key}
+      - name: portfolio_key
+        tests:
+          - relationships:
+              arguments: {to: ref('dim_portfolio'), field: portfolio_key}
+      - name: instrument_key
+        tests:
+          - relationships:
+              arguments: {to: ref('dim_instrument'), field: instrument_key}
+
+  - name: fct_positions_monthly
+    description: "Cartera, instrumento y cierre de mes."
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns: [date_key, portfolio_key, instrument_key]
+    columns:
+      - name: date_key
+        tests:
+          - relationships:
+              arguments: {to: ref('dim_date'), field: date_key}
+      - name: portfolio_key
+        tests:
+          - relationships:
+              arguments: {to: ref('dim_portfolio'), field: portfolio_key}
+      - name: instrument_key
+        tests:
+          - relationships:
+              arguments: {to: ref('dim_instrument'), field: instrument_key}
+
+  - name: fct_instrument_monthly
+    description: "Instrumento y cierre de mes."
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns: [date_key, instrument_key]
+    columns:
+      - name: instrument_key
+        tests:
+          - relationships:
+              arguments: {to: ref('dim_instrument'), field: instrument_key}
