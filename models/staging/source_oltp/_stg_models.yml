@@ -1,0 +1,58 @@
+models:
+  - name: stg_instruments
+    description: "Catálogo de instrumentos financieros."
+    columns:
+      - name: instrument_id
+        tests:
+          - unique
+          - not_null
+      - name: ticker
+        tests:
+          - unique
+          - not_null
+      - name: asset_class
+        tests:
+          - accepted_values:
+              arguments: 
+                values: ['Equity', 'ETF', 'Benchmark']
+      - name: currency
+        tests:
+          - accepted_values:
+              arguments: 
+                values: ['USD']
+
+  - name: stg_market_prices
+    config:
+      event_time: price_date
+    columns:
+      - name: price_date
+        tests: [not_null]
+      - name: ticker
+        tests: [not_null]
+      - name: market_price_source
+        tests:
+          - accepted_values:
+              arguments: 
+                values: ['MARKET_FEED', 'BACKUP_FEED']
+
+  - name: stg_orders
+    columns:
+      - name: order_id
+        tests: [unique, not_null]
+      - name: side
+        tests:
+          - accepted_values:
+              arguments: 
+                values: ['BUY', 'SELL']
+      - name: status
+        tests:
+          - accepted_values:
+              arguments: 
+                values: ['FILLED', 'CANCELLED', 'REJECTED']
+
+  - name: stg_parties_accounts
+    columns:
+      - name: account_id
+        tests: [not_null]
+      - name: updated_at
+        tests: [not_null]
