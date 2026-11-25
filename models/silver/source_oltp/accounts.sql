@@ -32,10 +32,14 @@ account_versions as (
     from changes
     where previous_hash is null
        or attributes_hash <> previous_hash
-)
+),
 
-select
+Vigencia as(
+    select
     *
     , valid_to is null as is_current
 from account_versions
+)
+
+select * from Vigencia
 
