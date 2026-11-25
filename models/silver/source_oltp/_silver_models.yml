@@ -1,0 +1,81 @@
+version: 2
+
+models:
+  - name: instruments
+    columns:
+      - name: instrument_id
+        tests: [unique, not_null]
+      - name: ticker
+        tests: [unique, not_null]
+      - name: sector_id
+        tests: [not_null]
+      - name: asset_class_id
+        tests: [not_null]
+      - name: currency_code
+        tests: [not_null]
+
+  - name: orders
+    description: Una fila por orden con su última versión.
+    columns:
+      - name: order_id
+        tests: [unique, not_null]
+      - name: account_id
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('accounts')
+                field: account_id
+      - name: ticker
+        tests:
+          - relationships:
+              arguments:
+                to: ref('instruments')
+                field: ticker
+      - name: order_status
+        tests:
+          - accepted_values:
+              arguments:
+                values: ['FILLED', 'CANCELLED', 'REJECTED']
+
+  - name: daily_market_prices
+    description: Un precio de cierre por sesión e instrumento.
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns: [price_date, instrument_id]
+    columns:
+      - name: close_price
+        tests: [not_null]
+
+  - name: accounts
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments: 
+            combination_of_columns: [account_id, valid_from]
+    columns:
+      - name: client_code
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('clients')
+                field: client_code
+      - name: benchmark_instrument_id
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('instruments')
+                field: instrument_id
+
+  - name: clients
+    tests:
+    - dbt_utils.unique_combination_of_columns:
+        arguments:
+          combination_of_columns: [client_code, valid_from]
+    columns:
+      - name: country_code
+        tests: [not_null]
+      - name: risk_profile_code
+        tests: [not_null]

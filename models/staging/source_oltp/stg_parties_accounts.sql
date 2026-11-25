@@ -11,6 +11,6 @@ select
     , account_name
     , upper(trim(benchmark_ticker))     as benchmark_ticker
     , opened_date                       as created_at
-    , updated_at                        as updated_at_utc
-    , _loaded_at                        as loaded_at_utc
+    , updated_at                        as updated_at
+    , _loaded_at                        as loaded_at
 from source

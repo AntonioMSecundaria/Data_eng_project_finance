@@ -1,0 +1,8 @@
+snapshots:
+  - name: snap_parties_accounts
+    relation: ref('stg_parties_accounts')
+    config:
+      unique_key: [client_code, account_id]
+      strategy: check
+      check_cols: [risk_profile, account_name, full_name]
+      updated_at: updated_at

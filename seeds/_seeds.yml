@@ -3,7 +3,7 @@ seeds:
     description: Mapeo de país a código ISO 3166-1 alpha-2 y continente.
     columns:
       - name: country_name
-        description: Nombre del país en inglés.
+        description: Nombre del país en inglés
         data_tests:
           - unique
           - not_null
@@ -16,4 +16,69 @@ seeds:
         description: Continente.
         data_tests:
           - not_null
+
+  - name: risk_profile
+    description: Perfil de riesgo de los clientes
+    columns:
+      - name: risk_profile_code
+        description: Código del perfil de riesgo
+        data_tests:
+          - unique
+          - not_null
+      - name: risk_profile
+        description: Perfiles de riesgo del cliente
+        data_tests:
+          - unique
+          - not_null
+
+  - name: sectors
+    description: Sectores de mercado de los instrumentos.
+    columns:
+      - name: sector_id
+        data_tests: 
+          - unique
+          - not_null
+      - name: sector_name
+        data_tests: 
+          - unique 
+          - not_null
+
+  - name: asset_classes
+    description: Clases de activo (Equity, ETF, Benchmark)
+    columns:
+      - name: asset_class_id
+        data_tests: 
+          - unique 
+          - not_null
+      - name: asset_class
+        data_tests: 
+          - unique 
+          - not_null
+
+  - name: currencies
+    description: Divisas
+    columns:
+      - name: currency_code
+        data_tests: 
+        - unique
+        - not_null
+      - name: currency_name
+        data_tests: 
+        - not_null
+
+  - name: price_sources
+    description: Proveedor de precios y su prioridad, necesario debido al origen de los datos
+    columns:
+      - name: price_source_id
+        data_tests: 
+         - unique 
+         - not_null
+      - name: price_source
+        data_tests: 
+         - unique 
+         - not_null
+      - name: priority
+        data_tests: 
+         - unique 
+         - not_null
   
