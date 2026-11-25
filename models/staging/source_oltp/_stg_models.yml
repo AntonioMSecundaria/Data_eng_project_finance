@@ -27,7 +27,7 @@ models:
         tests: [not_null]
       - name: ticker
         tests: [not_null]
-      - name: source
+      - name: market_price_source
         tests:
           - accepted_values:
               arguments: 

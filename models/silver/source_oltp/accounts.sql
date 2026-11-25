@@ -1,17 +1,41 @@
 -- Estado actual de cada cuenta/cartera.
-with last_update as(
+with versions as (
     select
-    p.account_id
-    , p.client_code
-    , p.account_name
-    , i.instrument_id           as benchmark_instrument_id
-    , p.created_at
-    , p.updated_at_utc
-from {{ ref('stg_parties_accounts') }} p
-left join {{ref('instruments')}} i
-    on p.benchmark_ticker = i.ticker
-qualify row_number() over (partition by account_id order by updated_at_utc desc) = 1
+        s.account_id
+        , s.client_code
+        , s.account_name
+        , i.instrument_id       as benchmark_instrument_id
+        , s.created_at          as opened_date
+        , s.dbt_valid_from      as valid_from
+        , hash(s.client_code, s.account_name, i.instrument_id, s.created_at) as attributes_hash
+    from {{ ref('snap_parties_accounts') }} s
+    left join {{ ref('instruments') }} i
+        on s.benchmark_ticker = i.ticker
+),
+
+changes as (
+    select
+        *
+        , lag(attributes_hash) over (partition by account_id order by valid_from) as previous_hash
+    from versions
+),
+
+account_versions as (
+    select
+        account_id
+        , client_code
+        , account_name
+        , benchmark_instrument_id
+        , opened_date
+        , valid_from
+        , lead(valid_from) over (partition by account_id order by valid_from) as valid_to
+    from changes
+    where previous_hash is null
+       or attributes_hash <> previous_hash
 )
 
-select * from last_update
+select
+    *
+    , valid_to is null as is_current
+from account_versions
 
