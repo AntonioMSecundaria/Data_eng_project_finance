@@ -22,6 +22,8 @@ models:
                 values: ['USD']
 
   - name: stg_market_prices
+    config:
+      event_time: price_date
     columns:
       - name: price_date
         tests: [not_null]
