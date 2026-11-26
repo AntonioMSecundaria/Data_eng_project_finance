@@ -1,6 +1,18 @@
 -- Órdenes que se han llevado a cabo
+with orders_cte as(
+    select * from {{ ref('orders') }}
+),
 
-with calculated_filled_orders as(
+order_sides_cte as(
+    select * from {{ ref('order_sides') }}
+),
+
+order_statuses_cte as(
+    select * from {{ ref('order_statuses') }}
+),
+
+
+calculated_filled_orders as(
     select
         o.order_id
         , o.account_id
@@ -22,10 +34,10 @@ with calculated_filled_orders as(
             when s.side_code = 'SELL' then o.quantity * o.execution_price - o.commission 
             else 0 
         end         as cash_out
-    from {{ ref('orders') }} o
-    inner join {{ ref('order_sides') }} s
+    from orders_cte o
+    inner join order_sides_cte s
         on o.side_id = s.side_id
-    inner join {{ ref('order_statuses') }} st
+    inner join order_statuses_cte st
     on o.status_id = st.status_id
     where st.is_executed
 )

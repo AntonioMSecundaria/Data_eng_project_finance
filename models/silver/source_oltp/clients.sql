@@ -31,6 +31,14 @@ client_versions as (
        or attributes_hash <> previous_hash
 ),
 
+country_codes_cte as(
+    select * from {{ ref('country_codes') }}
+),
+
+risk_profile_cte as(
+    select * from {{ ref('risk_profile') }}
+),
+
 normalized as (
     select
         v.client_code
@@ -41,9 +49,9 @@ normalized as (
         , v.valid_to
         , v.valid_to is null as is_current
     from client_versions v
-    left join {{ ref('country_codes') }} c
+    left join country_codes_cte c
         on v.country_name = c.country_name
-    left join {{ ref('risk_profile') }} r
+    left join risk_profile_cte r
         on v.risk_profile = r.risk_profile
 )
 
