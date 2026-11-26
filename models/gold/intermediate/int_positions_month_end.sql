@@ -8,6 +8,13 @@ with month_ends as (
     from {{ ref('int_month_end_prices') }}
 ),
 
+filled_orders_cte as(
+    select * from {{ ref('int_filled_orders') }}
+),
+
+month_end_prices_cte as(
+    select * from {{ ref('int_month_end_prices') }}
+),
 
 accumulated as (
     select
@@ -18,7 +25,7 @@ accumulated as (
         , sum(f.cash_in)                as total_bought
         , sum(f.cash_out)               as total_sold
     from month_ends m
-    inner join {{ ref('int_filled_orders') }} f
+    inner join filled_orders_cte f
         on f.trade_date <= m.month_end_date            
     group by m.month_end_date, f.account_id, f.instrument_id
 ),
@@ -35,7 +42,7 @@ market_value_profit_loss as(
     , a.shares_held * p.close_price                                 as market_value
     , a.shares_held * p.close_price + a.total_sold - a.total_bought as total_pnl
 from accumulated a
-inner join {{ ref('int_month_end_prices') }} p
+inner join month_end_prices_cte p
     on p.month_end_date = a.month_end_date and p.instrument_id = a.instrument_id
 )
 
