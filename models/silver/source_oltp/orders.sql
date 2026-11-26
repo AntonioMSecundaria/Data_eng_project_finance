@@ -23,6 +23,18 @@ deduplicated as (
     qualify row_number() over (partition by order_id order by loaded_at_utc desc) = 1
 ),
 
+instruments_cte as(
+    select * from {{ ref('instruments') }}
+),
+
+order_sides_cte as(
+    select * from {{ ref('order_sides') }}
+),
+
+order_statuses_cte as(
+    select * from {{ ref('order_statuses') }}
+),
+
 normalized as (
     select
         d.order_id
@@ -36,11 +48,11 @@ normalized as (
         , d.ordered_at
         , d.loaded_at_utc
     from deduplicated d
-    left join {{ ref('instruments') }} i
+    left join instruments_cte i
         on d.ticker = i.ticker
-    left join {{ ref('order_sides') }} sd
+    left join order_sides_cte sd
         on d.side = sd.side_code
-    left join {{ ref('order_statuses') }} st
+    left join order_statuses_cte st
         on d.status = st.status_code
 )
 
